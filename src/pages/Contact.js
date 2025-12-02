@@ -27,7 +27,7 @@ const Contact = () => {
             </div>
           </div>
           <div className="col-lg-5 offset-lg-1 mt-4 mt-lg-0">
-            <div className="card shadow-sm border-0">
+            <div className="card shadow-sm border-0 clunky-card">
               <div className="card-body">
                 <h5 className="fw-bold">Quick message</h5>
                 <p className="text-muted small">

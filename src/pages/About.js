@@ -23,7 +23,7 @@ const About = () => {
             </p>
           </div>
           <div className="col-lg-5 offset-lg-1">
-            <div className="card shadow-sm border-0">
+            <div className="card shadow-sm border-0 clunky-card">
               <div className="card-body">
                 <h6 className="text-uppercase text-muted">Principles</h6>
                 <ul className="list-unstyled mb-0">

@@ -46,7 +46,10 @@ const Events = () => {
       <div className="container">
         <div className="row g-4">
           <div className="col-lg-5">
-            <div className="card shadow-sm border-0 sticky-lg-top" style={{ top: '96px' }}>
+            <div
+              className="card shadow-sm border-0 sticky-lg-top clunky-card"
+              style={{ top: '96px' }}
+            >
               <div className="card-body">
                 <h5 className="fw-bold mb-3">Create a new event</h5>
                 <form onSubmit={onCreateEvent} className="needs-validation">
@@ -150,7 +153,7 @@ const Events = () => {
 
                 return (
                   <div key={event.id} className="col-12">
-                    <div className="card shadow-sm border-0 h-100">
+                    <div className="card shadow-sm border-0 h-100 clunky-card">
                       <div className="card-body">
                         <div className="d-flex justify-content-between align-items-start">
                           <div>

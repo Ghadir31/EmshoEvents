@@ -8,7 +8,8 @@ import Home from './pages/Home';
 import About from './pages/About';
 import Services from './pages/Services';
 import Contact from './pages/Contact';
-import Events from './pages/Events';
+import BrowseEvents from './pages/BrowseEvents';
+import CreateEvent from './pages/CreateEvent';
 import EventDetail from './pages/EventDetail';
 import { EventProvider } from './context/EventContext';
 
@@ -24,7 +25,9 @@ function App() {
               <Route path="/about" element={<About />} />
               <Route path="/services" element={<Services />} />
               <Route path="/contact" element={<Contact />} />
-              <Route path="/events" element={<Events />} />
+              <Route path="/events" element={<BrowseEvents />} />
+              <Route path="/events/browse" element={<BrowseEvents />} />
+              <Route path="/events/create" element={<CreateEvent />} />
               <Route path="/events/:id" element={<EventDetail />} />
             </Routes>
           </main>

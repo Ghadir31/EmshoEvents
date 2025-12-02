@@ -1,18 +1,104 @@
+:root {
+  --emsho-red: #d72b2b;
+  --emsho-green: #2a8a3a;
+  --emsho-cream: #f9f6f2;
+  --bs-primary: var(--emsho-red);
+  --bs-primary-rgb: 215, 43, 43;
+}
+
 .app-shell {
-  background: #f7f9fb;
+  background: var(--emsho-cream);
+}
+
+.navbar {
+  border-bottom: 2px solid rgba(0, 0, 0, 0.05);
 }
 
 .hero-section {
-  background: linear-gradient(135deg, #0d6efd, #5ba8ff);
+  background: linear-gradient(
+    135deg,
+    var(--emsho-red) 0%,
+    var(--emsho-red) 38%,
+    #ffffff 38%,
+    #ffffff 58%,
+    var(--emsho-green) 58%,
+    var(--emsho-green) 100%
+  );
   color: #fff;
+  box-shadow: 14px 16px 0 rgba(0, 0, 0, 0.08);
+}
+
+.btn-primary {
+  background-color: var(--emsho-red);
+  border-color: var(--emsho-red);
+}
+
+.btn-primary:hover {
+  background-color: #b92121;
+  border-color: #b92121;
+}
+
+.btn-outline-primary {
+  color: var(--emsho-red);
+  border-color: var(--emsho-red);
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--emsho-red);
+  border-color: var(--emsho-red);
 }
 
 .icon-circle {
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   font-size: 1.1rem;
+  background-color: var(--emsho-green);
+  color: #fff;
+  box-shadow: 6px 7px 0 rgba(0, 0, 0, 0.05);
+}
+
+.badge {
+  transform: rotate(-0.4deg);
+}
+
+.card {
+  border-radius: 0.7rem;
+  border: 2px solid #f1e9e6;
+  box-shadow: 10px 12px 0 rgba(0, 0, 0, 0.05);
+}
+
+.clunky-card {
+  transform: rotate(-0.35deg);
+}
+
+.progress {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+footer {
+  border-top: 3px solid rgba(0, 0, 0, 0.08);
+}
+
+.event-card {
+  min-height: 220px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.event-card__overlay {
+  position: relative;
+  height: 100%;
+  padding: 1.25rem;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.65));
+  backdrop-filter: blur(1px);
+}
+
+.event-card-compact {
+  min-height: 180px;
 }

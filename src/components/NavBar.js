@@ -20,7 +20,7 @@ const NavBar = () => {
           <span className="navbar-toggler-icon" />
         </button>
         <div className="collapse navbar-collapse" id="navMenu">
-          <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+          <ul className="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center gap-lg-2">
             <li className="nav-item">
               <NavLink end className="nav-link" to="/">
                 Home
@@ -37,16 +37,29 @@ const NavBar = () => {
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink className="nav-link" to="/events">
-                Events
-              </NavLink>
-            </li>
-            <li className="nav-item">
               <NavLink className="nav-link" to="/contact">
                 Contact
               </NavLink>
             </li>
+            <li className="nav-item d-lg-none">
+              <NavLink className="nav-link" to="/events/create">
+                Create Event
+              </NavLink>
+            </li>
+            <li className="nav-item d-lg-none">
+              <NavLink className="nav-link" to="/events/browse">
+                Browse Events
+              </NavLink>
+            </li>
           </ul>
+          <div className="d-none d-lg-flex ms-lg-3 gap-2">
+            <Link to="/events/create" className="btn btn-outline-primary btn-sm">
+              Create event
+            </Link>
+            <Link to="/events/browse" className="btn btn-primary btn-sm">
+              Browse events
+            </Link>
+          </div>
         </div>
       </div>
     </nav>
