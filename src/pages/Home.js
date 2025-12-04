@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useEvents } from '../context/EventContext';
 import EventCard from '../components/EventCard';
+import CategoryCard from '../components/CategoryCard';
 
 const getDate = (event) => new Date(`${event.date}T${event.time || '00:00'}`);
 
@@ -10,10 +11,14 @@ const Home = () => {
   const sorted = [...events].sort((a, b) => getDate(b) - getDate(a));
   const featured = sorted.slice(0, 3);
   const categories = Array.from(new Set(events.map((e) => e.category || 'General')));
-  const eventsByCategory = categories.map((cat) => ({
-    category: cat,
-    event: sorted.find((e) => (e.category || 'General') === cat),
-  }));
+  const eventsByCategory = categories.map((cat) => {
+    const matches = sorted.filter((e) => (e.category || 'General') === cat);
+    return {
+      category: cat,
+      event: matches[0],
+      total: matches.length,
+    };
+  });
 
   return (
     <>
@@ -22,14 +27,14 @@ const Home = () => {
           <div className="row align-items-center">
             <div className="col-lg-7">
               <p className="badge rounded-pill bg-light text-primary mb-3">
-                Fresh events with cedar red energy.
+                Built for Lebanon's gatherings.
               </p>
               <h1 className="display-5 fw-bold">
-                Showcase what’s next. Fill seats faster.
+                Your home for events across Lebanon.
               </h1>
               <p className="lead mt-3 mb-4">
-                EmshoEvents highlights your latest happenings and helps guests
-                find the right fit by category, timing, or location.
+                From Beirut to Tripoli to the mountains, find concerts, meetups, and community
+                moments by category, timing, or location.
               </p>
               <div className="d-flex gap-3 flex-wrap">
                 <Link to="/events/browse" className="btn btn-light btn-lg text-primary">
@@ -98,10 +103,10 @@ const Home = () => {
           </div>
           <div className="row g-4">
             {eventsByCategory.map(
-              ({ category, event }) =>
+              ({ category, event, total }) =>
                 event && (
                   <div key={category} className="col-md-4">
-                    <EventCard event={event} compact />
+                    <CategoryCard category={category} event={event} total={total} />
                   </div>
                 )
             )}

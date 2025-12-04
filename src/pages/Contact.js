@@ -55,8 +55,13 @@ const Contact = () => {
                       placeholder="What kind of event are you planning?"
                     />
                   </div>
-                  <button type="button" className="btn btn-primary w-100" disabled>
-                    Send (placeholder)
+                  <button
+                    type="button"
+                    className="btn btn-primary w-100 text-white"
+                    style={{ backgroundColor: 'var(--emsho-red)', borderColor: 'var(--emsho-red)' }}
+                    disabled
+                  >
+                    Send
                   </button>
                 </form>
               </div>

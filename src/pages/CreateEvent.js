@@ -41,8 +41,7 @@ const CreateEvent = () => {
               <p className="badge bg-primary bg-opacity-10 text-primary">Create</p>
               <h2 className="fw-bold mb-2">Craft a new event</h2>
               <p className="text-muted">
-                Set your details, pick a category, and drop in an image URL (or leave blank and we
-                will pick one for you).
+                Set your details, pick a category, and drop in an image URL.
               </p>
             </div>
             <div className="card clunky-card">
@@ -154,7 +153,7 @@ const CreateEvent = () => {
               </div>
             </div>
           </div>
-          <div className="col-lg-5">
+          {/* <div className="col-lg-5">
             <div className="card clunky-card">
               <div className="card-body">
                 <h6 className="text-uppercase text-muted">Tips</h6>
@@ -165,7 +164,7 @@ const CreateEvent = () => {
                 </ul>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </section>

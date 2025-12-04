@@ -151,14 +151,6 @@ const EventDetail = () => {
                       Registered! See your name in the list.
                     </div>
                   )}
-                  <hr />
-                  <div className="fw-bold mb-1">Want to tweak details?</div>
-                  <p className="text-muted small mb-3">
-                    Editing is coming soon. For now, draft a new event with your updates.
-                  </p>
-                  <Link to="/events/create" className="btn btn-outline-primary w-100">
-                    Create another event
-                  </Link>
                 </div>
               </div>
             </div>

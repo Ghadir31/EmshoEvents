@@ -17,9 +17,8 @@ const About = () => {
               setup.
             </p>
             <p className="text-muted">
-              Today the product runs on straightforward React + Bootstrap. As we
-              add authentication and real data sources later, the core UX stays
-              clean and predictable.
+              In addition to event planning, EmshoEvents was planned to be the 
+              number one hub for exploring and finding events within Lebanon.
             </p>
           </div>
           <div className="col-lg-5 offset-lg-1">
