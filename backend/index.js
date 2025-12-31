@@ -160,6 +160,76 @@ app.post("/events", (req, res) => {
   });
 });
 
+// ---------------- UPDATE EVENT ----------------
+app.put("/events/:id", (req, res) => {
+  const { id } = req.params;
+  const { title, description, date, time, location, capacity, category, image } = req.body;
+
+  if (!title || !date || !time) {
+    return res.status(400).json({ error: "Title, date, and time are required" });
+  }
+
+  const sql = `
+    UPDATE events
+    SET title = ?, description = ?, event_date = ?, event_time = ?, location = ?, capacity = ?, category = ?, image_url = ?
+    WHERE id = ?
+  `;
+
+  const payload = [
+    title,
+    description || "",
+    date,
+    time,
+    location || "",
+    Number.isFinite(Number(capacity)) ? Number(capacity) : 0,
+    category || "General",
+    image || "",
+    id,
+  ];
+
+  pool.query(sql, payload, (err, result) => {
+    if (err) {
+      console.error("Error PUT /events/:id", err);
+      return res.status(500).json({ error: "Database error" });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Event not found" });
+    }
+
+    res.json({
+      id: Number(id),
+      title,
+      description: description || "",
+      date,
+      time,
+      location: location || "",
+      capacity: Number.isFinite(Number(capacity)) ? Number(capacity) : 0,
+      category: category || "General",
+      image: image || "",
+    });
+  });
+});
+
+// ---------------- DELETE EVENT ----------------
+app.delete("/events/:id", (req, res) => {
+  const { id } = req.params;
+  const sql = `
+    DELETE FROM events
+    WHERE id = ?
+  `;
+
+  pool.query(sql, [id], (err, result) => {
+    if (err) {
+      console.error("Error DELETE /events/:id", err);
+      return res.status(500).json({ error: "Database error" });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Event not found" });
+    }
+    res.json({ message: "Event deleted", id: Number(id) });
+  });
+});
+
 // ---------------- REGISTER ATTENDEE ----------------
 app.post("/events/:id/attendees", (req, res) => {
   const { id } = req.params;

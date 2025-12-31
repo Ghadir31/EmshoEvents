@@ -106,8 +106,43 @@ export const EventProvider = ({ children }) => {
     }
   };
 
+  const updateEvent = async (id, payload) => {
+    const category = payload.category || 'General';
+    try {
+      const res = await fetch(`${API_URL}/events/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (res.status === 404) return { ok: false, error: 'Event not found' };
+      if (!res.ok) throw new Error(`Failed to update event: ${res.status}`);
+      const updated = await res.json();
+      const normalized = withFallbacks({ ...updated, category });
+      setEvents((prev) =>
+        prev.map((event) => (event.id === Number(id) ? { ...event, ...normalized } : event))
+      );
+      return { ok: true, data: normalized };
+    } catch (err) {
+      console.error('Error updating event', err);
+      return { ok: false, error: err.message };
+    }
+  };
+
+  const deleteEvent = async (id) => {
+    try {
+      const res = await fetch(`${API_URL}/events/${id}`, { method: 'DELETE' });
+      if (res.status === 404) return { ok: false, error: 'Event not found' };
+      if (!res.ok) throw new Error(`Failed to delete event: ${res.status}`);
+      setEvents((prev) => prev.filter((event) => event.id !== Number(id)));
+      return { ok: true };
+    } catch (err) {
+      console.error('Error deleting event', err);
+      return { ok: false, error: err.message };
+    }
+  };
+
   const value = useMemo(
-    () => ({ events, createEvent, registerForEvent }),
+    () => ({ events, createEvent, registerForEvent, updateEvent, deleteEvent }),
     [events]
   );
 
