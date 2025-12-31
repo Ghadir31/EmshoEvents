@@ -7,6 +7,7 @@ const EventDetail = () => {
   const { events, registerForEvent } = useEvents();
   const [form, setForm] = useState({ name: '', email: '' });
   const [saved, setSaved] = useState(false);
+  const [error, setError] = useState('');
 
   const event = events.find((item) => item.id === Number(id));
 
@@ -26,10 +27,15 @@ const EventDetail = () => {
   const capacity = event.capacity || 1;
   const percent = Math.min((event.attendees.length / capacity) * 100, 100);
 
-  const onRegister = (e) => {
+  const onRegister = async (e) => {
     e.preventDefault();
     if (!form.name || !form.email) return;
-    registerForEvent(event.id, form);
+    setError('');
+    const result = await registerForEvent(event.id, form);
+    if (!result?.ok) {
+      setError(result?.error || 'Registration failed');
+      return;
+    }
     setForm({ name: '', email: '' });
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
@@ -146,6 +152,11 @@ const EventDetail = () => {
                       </button>
                     </div>
                   </form>
+                  {error && (
+                    <div className="alert alert-danger mt-2 py-2 mb-0">
+                      {error}
+                    </div>
+                  )}
                   {saved && (
                     <div className="alert alert-success mt-2 py-2 mb-0">
                       Registered! See your name in the list.

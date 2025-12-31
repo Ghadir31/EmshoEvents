@@ -19,14 +19,20 @@ const CreateEvent = () => {
   const { createEvent } = useEvents();
   const [form, setForm] = useState(defaultForm);
   const [saved, setSaved] = useState(false);
+  const [error, setError] = useState("");
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     if (!form.title || !form.date || !form.time) return;
-    createEvent({
+    setError("");
+    const result = await createEvent({
       ...form,
       capacity: Number(form.capacity) || 0,
     });
+    if (!result?.ok) {
+      setError(result?.error || "Could not create event");
+      return;
+    }
     setForm(defaultForm);
     setSaved(true);
     setTimeout(() => setSaved(false), 2500);
@@ -144,6 +150,11 @@ const CreateEvent = () => {
                       Go to browse
                     </Link>
                   </div>
+                  {error && (
+                    <div className="alert alert-danger mt-3 mb-0 py-2">
+                      {error}
+                    </div>
+                  )}
                   {saved && (
                     <div className="alert alert-success mt-3 mb-0 py-2">
                       Event drafted! Check it out under Browse.
