@@ -1,5 +1,4 @@
-import React, { createContext, useContext, useMemo, useState } from 'react';
-import initialEvents from '../data/events';
+import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
 
 const fallbackImages = {
   Technology:
@@ -19,41 +18,92 @@ const fallbackImages = {
 };
 
 const EventContext = createContext();
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
+
+const withFallbacks = (event) => {
+  const category = event.category || 'General';
+  return {
+    attendees: [],
+    ...event,
+    attendees: event.attendees || [],
+    category,
+    image: event.image || fallbackImages[category] || fallbackImages.General,
+  };
+};
 
 export const EventProvider = ({ children }) => {
-  const [events, setEvents] = useState(initialEvents);
+  const [events, setEvents] = useState([]);
 
-  const createEvent = (payload) => {
-    setEvents((prev) => {
-      const nextId = (prev[prev.length - 1]?.id || 0) + 1;
-      const category = payload.category || 'General';
-      return [
-        ...prev,
-        {
-          id: nextId,
-          attendees: [],
-          image: payload.image || fallbackImages[category] || fallbackImages.General,
-          ...payload,
-          category,
-        },
-      ];
-    });
+  useEffect(() => {
+    let isMounted = true;
+    const load = async () => {
+      try {
+        const res = await fetch(`${API_URL}/events`);
+        if (!res.ok) throw new Error(`Failed to load events: ${res.status}`);
+        const data = await res.json();
+        if (isMounted) {
+          setEvents(Array.isArray(data) ? data.map(withFallbacks) : []);
+        }
+      } catch (err) {
+        console.error('Error fetching events', err);
+        if (isMounted) setEvents([]);
+      }
+    };
+    load();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const createEvent = async (payload) => {
+    const category = payload.category || 'General';
+    try {
+      const res = await fetch(`${API_URL}/events`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) throw new Error(`Failed to create event: ${res.status}`);
+      const created = await res.json();
+      const normalized = withFallbacks({ ...created, category });
+      setEvents((prev) => [...prev, normalized]);
+      return { ok: true, data: normalized };
+    } catch (err) {
+      console.error('Error creating event', err);
+      return { ok: false, error: err.message };
+    }
   };
 
-  const registerForEvent = (id, attendee) => {
-    setEvents((prev) =>
-      prev.map((event) => {
-        if (event.id !== id) return event;
-        const existing = event.attendees.some(
-          (person) => person.email.toLowerCase() === attendee.email.toLowerCase()
-        );
-        if (existing) return event;
-        return {
-          ...event,
-          attendees: [...event.attendees, attendee],
-        };
-      })
-    );
+  const registerForEvent = async (id, attendee) => {
+    try {
+      const res = await fetch(`${API_URL}/events/${id}/attendees`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(attendee),
+      });
+      if (res.status === 409) {
+        return { ok: false, error: 'Already registered' };
+      }
+      if (res.status === 404) {
+        return { ok: false, error: 'Event not found' };
+      }
+      if (!res.ok) throw new Error(`Failed to register: ${res.status}`);
+
+      setEvents((prev) =>
+        prev.map((event) => {
+          if (event.id !== Number(id)) return event;
+          const exists = event.attendees.some(
+            (person) => person.email.toLowerCase() === attendee.email.toLowerCase()
+          );
+          if (exists) return event;
+          return { ...event, attendees: [...event.attendees, attendee] };
+        })
+      );
+      return { ok: true };
+    } catch (err) {
+      console.error('Error registering attendee', err);
+      return { ok: false, error: err.message };
+    }
   };
 
   const value = useMemo(
