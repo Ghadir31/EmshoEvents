@@ -23,7 +23,8 @@
     var(--emsho-green) 100%
   );
   color: #fff;
-  box-shadow: 14px 16px 0 rgba(0, 0, 0, 0.08);
+  border-radius: 16px;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.18);
 }
 
 .btn-primary {
@@ -56,21 +57,17 @@
   font-size: 1.1rem;
   background-color: var(--emsho-green);
   color: #fff;
-  box-shadow: 6px 7px 0 rgba(0, 0, 0, 0.05);
-}
-
-.badge {
-  transform: rotate(-0.4deg);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
 }
 
 .card {
-  border-radius: 0.7rem;
-  border: 2px solid #f1e9e6;
-  box-shadow: 10px 12px 0 rgba(0, 0, 0, 0.05);
+  border-radius: 0.9rem;
+  border: 1px solid #eee6e2;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
 }
 
 .clunky-card {
-  transform: rotate(-0.35deg);
+  transform: none;
 }
 
 .progress {
@@ -140,7 +137,7 @@ footer {
   border-radius: 26px;
   background-size: cover;
   background-position: center;
-  box-shadow: 10px 12px 0 rgba(0, 0, 0, 0.06);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1);
   border: 3px solid #fff;
 }
 
