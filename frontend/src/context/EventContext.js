@@ -22,12 +22,13 @@ const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
 
 const withFallbacks = (event) => {
   const category = event.category || 'General';
+  const image = (event.image || '').trim();
   return {
     attendees: [],
     ...event,
     attendees: event.attendees || [],
     category,
-    image: event.image || fallbackImages[category] || fallbackImages.General,
+    image: image || fallbackImages[category] || fallbackImages.General,
   };
 };
 

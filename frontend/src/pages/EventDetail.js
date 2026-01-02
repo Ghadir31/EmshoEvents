@@ -58,6 +58,7 @@ const EventDetail = () => {
   const capacity = event.capacity || 1;
   const percent = Math.min((event.attendees.length / capacity) * 100, 100);
   const isFull = capacity > 0 && event.attendees.length >= capacity;
+  const imageUrl = (event.image || '').trim();
 
   const onRegister = async (e) => {
     e.preventDefault();
@@ -83,6 +84,7 @@ const EventDetail = () => {
     const payload = {
       ...editForm,
       capacity: Number(editForm.capacity) || 0,
+      image: (editForm.image || '').trim(),
     };
     if (!payload.title || !payload.date || !payload.time) {
       setEditError('Title, date, and time are required');
@@ -114,7 +116,7 @@ const EventDetail = () => {
       <section
         className="text-white py-5"
         style={{
-          backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.3), rgba(0,0,0,0.65)), url(${event.image})`,
+          backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.3), rgba(0,0,0,0.65)), url(${imageUrl})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}
