@@ -75,6 +75,14 @@ export const EventProvider = ({ children }) => {
   };
 
   const registerForEvent = async (id, attendee) => {
+    const event = events.find((ev) => ev.id === Number(id));
+    const capacity = event?.capacity ?? 0;
+    const attendeeCount = event?.attendees?.length ?? 0;
+
+    if (capacity > 0 && attendeeCount >= capacity) {
+      return { ok: false, error: 'Event is full' };
+    }
+
     try {
       const res = await fetch(`${API_URL}/events/${id}/attendees`, {
         method: 'POST',

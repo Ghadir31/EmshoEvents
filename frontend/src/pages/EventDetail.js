@@ -57,10 +57,15 @@ const EventDetail = () => {
 
   const capacity = event.capacity || 1;
   const percent = Math.min((event.attendees.length / capacity) * 100, 100);
+  const isFull = capacity > 0 && event.attendees.length >= capacity;
 
   const onRegister = async (e) => {
     e.preventDefault();
     if (!form.name || !form.email) return;
+    if (isFull) {
+      setError('This event is full');
+      return;
+    }
     setError('');
     const result = await registerForEvent(event.id, form);
     if (!result?.ok) {
@@ -313,6 +318,11 @@ const EventDetail = () => {
                     <div className="fw-bold mb-1">Location</div>
                     <div className="text-muted">{event.location}</div>
                   </div>
+                  {isFull && (
+                    <div className="alert alert-warning mt-3 py-2 mb-0">
+                      This event is full
+                    </div>
+                  )}
                   <hr />
                   <h6 className="fw-bold mb-2">Register</h6>
                   <form onSubmit={onRegister} className="row g-2">
@@ -334,10 +344,11 @@ const EventDetail = () => {
                         value={form.email}
                         onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
                         required
+                        disabled={isFull}
                       />
                     </div>
                     <div className="col-12 d-grid">
-                      <button type="submit" className="btn btn-primary">
+                      <button type="submit" className="btn btn-primary" disabled={isFull}>
                         Register
                       </button>
                     </div>

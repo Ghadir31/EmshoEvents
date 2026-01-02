@@ -239,28 +239,52 @@ app.post("/events/:id/attendees", (req, res) => {
     return res.status(400).json({ error: "Name and email are required" });
   }
 
-  const sql = `
-    INSERT INTO event_attendees (event_id, name, email)
-    VALUES (?, ?, ?)
+  const capacitySql = `
+    SELECT e.capacity, COUNT(a.id) AS attendeeCount
+    FROM events e
+    LEFT JOIN event_attendees a ON e.id = a.event_id
+    WHERE e.id = ?
+    GROUP BY e.id, e.capacity
   `;
 
-  pool.query(sql, [id, name, email], (err, result) => {
-    if (err) {
-      if (err.code === "ER_NO_REFERENCED_ROW_2") {
-        return res.status(404).json({ error: "Event not found" });
-      }
-      if (err.code === "ER_DUP_ENTRY") {
-        return res.status(409).json({ error: "Email already registered for this event" });
-      }
-      console.error("Error POST /events/:id/attendees", err);
+  pool.query(capacitySql, [id], (capacityErr, rows) => {
+    if (capacityErr) {
+      console.error("Error checking capacity", capacityErr);
       return res.status(500).json({ error: "Database error" });
     }
 
-    res.status(201).json({
-      id: result.insertId,
-      event_id: Number(id),
-      name,
-      email,
+    if (!rows || rows.length === 0) {
+      return res.status(404).json({ error: "Event not found" });
+    }
+
+    const { capacity, attendeeCount } = rows[0];
+    if (Number(capacity) > 0 && Number(attendeeCount) >= Number(capacity)) {
+      return res.status(409).json({ error: "Event is full" });
+    }
+
+    const sql = `
+      INSERT INTO event_attendees (event_id, name, email)
+      VALUES (?, ?, ?)
+    `;
+
+    pool.query(sql, [id, name, email], (err, result) => {
+      if (err) {
+        if (err.code === "ER_NO_REFERENCED_ROW_2") {
+          return res.status(404).json({ error: "Event not found" });
+        }
+        if (err.code === "ER_DUP_ENTRY") {
+          return res.status(409).json({ error: "Email already registered for this event" });
+        }
+        console.error("Error POST /events/:id/attendees", err);
+        return res.status(500).json({ error: "Database error" });
+      }
+
+      res.status(201).json({
+        id: result.insertId,
+        event_id: Number(id),
+        name,
+        email,
+      });
     });
   });
 });
