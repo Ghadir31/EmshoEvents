@@ -329,17 +329,18 @@ const EventDetail = () => {
                     <div className="col-12">
                       <input
                         type="text"
-                        className="form-control"
+                        className={`form-control${isFull ? ' input-disabled' : ''}`}
                         placeholder="Name"
                         value={form.name}
                         onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
                         required
+                        disabled={isFull}
                       />
                     </div>
                     <div className="col-12">
                       <input
                         type="email"
-                        className="form-control"
+                        className={`form-control${isFull ? ' input-disabled' : ''}`}
                         placeholder="Email"
                         value={form.email}
                         onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
@@ -348,7 +349,11 @@ const EventDetail = () => {
                       />
                     </div>
                     <div className="col-12 d-grid">
-                      <button type="submit" className="btn btn-primary" disabled={isFull}>
+                      <button
+                        type="submit"
+                        className={`btn ${isFull ? 'btn-secondary' : 'btn-primary'}`}
+                        disabled={isFull}
+                      >
                         Register
                       </button>
                     </div>

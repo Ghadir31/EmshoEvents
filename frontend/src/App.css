@@ -148,3 +148,14 @@ footer {
   border-radius: 999px;
   background: rgba(0, 0, 0, 0.03);
 }
+
+.input-disabled {
+  background-color: #f5f5f5 !important;
+  color: #6c757d !important;
+  border-color: #e5e5e5 !important;
+}
+
+.input-disabled::placeholder {
+  color: #9aa0a6 !important;
+  opacity: 0.8;
+}
