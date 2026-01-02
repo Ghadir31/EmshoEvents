@@ -127,7 +127,11 @@ export const EventProvider = ({ children }) => {
       const updated = await res.json();
       const normalized = withFallbacks({ ...updated, category });
       setEvents((prev) =>
-        prev.map((event) => (event.id === Number(id) ? { ...event, ...normalized } : event))
+        prev.map((event) => {
+          if (event.id !== Number(id)) return event;
+          const existingAttendees = event.attendees || [];
+          return { ...event, ...normalized, attendees: existingAttendees };
+        })
       );
       return { ok: true, data: normalized };
     } catch (err) {
