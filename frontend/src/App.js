@@ -12,29 +12,34 @@ import BrowseEvents from './pages/BrowseEvents';
 import CreateEvent from './pages/CreateEvent';
 import EventDetail from './pages/EventDetail';
 import { EventProvider } from './context/EventContext';
+import { AuthProvider } from './context/AuthContext';
+import Login from './pages/Login';
 
 function App() {
   return (
-    <EventProvider>
-      <Router>
-        <div className="app-shell d-flex flex-column min-vh-100">
-          <NavBar />
-          <main className="flex-fill">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/services" element={<Services />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/events" element={<BrowseEvents />} />
-              <Route path="/events/browse" element={<BrowseEvents />} />
-              <Route path="/events/create" element={<CreateEvent />} />
-              <Route path="/events/:id" element={<EventDetail />} />
-            </Routes>
-          </main>
-          <Footer />
-        </div>
-      </Router>
-    </EventProvider>
+    <AuthProvider>
+      <EventProvider>
+        <Router>
+          <div className="app-shell d-flex flex-column min-vh-100">
+            <NavBar />
+            <main className="flex-fill">
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/services" element={<Services />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/events" element={<BrowseEvents />} />
+                <Route path="/events/browse" element={<BrowseEvents />} />
+                <Route path="/events/create" element={<CreateEvent />} />
+                <Route path="/events/:id" element={<EventDetail />} />
+                <Route path="/login" element={<Login />} />
+              </Routes>
+            </main>
+            <Footer />
+          </div>
+        </Router>
+      </EventProvider>
+    </AuthProvider>
   );
 }
 

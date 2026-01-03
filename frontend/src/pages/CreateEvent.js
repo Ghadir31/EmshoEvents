@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useEvents } from '../context/EventContext';
+import { useAuth } from '../context/AuthContext';
 
 const categories = ['Technology', 'Wellness', 'Community', 'Business', 'Arts', 'Education', 'General'];
 
@@ -17,6 +18,7 @@ const defaultForm = {
 
 const CreateEvent = () => {
   const { createEvent } = useEvents();
+  const { isAuthenticated } = useAuth();
   const [form, setForm] = useState(defaultForm);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState("");
@@ -37,6 +39,22 @@ const CreateEvent = () => {
     setSaved(true);
     setTimeout(() => setSaved(false), 2500);
   };
+
+  if (!isAuthenticated) {
+    return (
+      <section className="py-5">
+        <div className="container text-center">
+          <h2 className="fw-bold mb-2">Admin access required</h2>
+          <p className="text-muted">
+            Log in to create, edit, or delete events. Guests can still browse and register.
+          </p>
+          <Link to="/login" className="btn btn-primary">
+            Go to login
+          </Link>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="py-5">

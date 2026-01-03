@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useEvents } from '../context/EventContext';
+import { useAuth } from '../context/AuthContext';
 
 const EventDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { events, registerForEvent, updateEvent, deleteEvent } = useEvents();
+  const { isAuthenticated } = useAuth();
 
   const [form, setForm] = useState({ name: '', email: '' });
   const [saved, setSaved] = useState(false);
@@ -80,6 +82,10 @@ const EventDetail = () => {
 
   const onSaveEdit = async (e) => {
     e.preventDefault();
+    if (!isAuthenticated) {
+      setEditError('Please log in to edit events.');
+      return;
+    }
     setEditError('');
     const payload = {
       ...editForm,
@@ -101,6 +107,10 @@ const EventDetail = () => {
   };
 
   const onDelete = async () => {
+    if (!isAuthenticated) {
+      setEditError('Please log in to delete events.');
+      return;
+    }
     const ok = window.confirm('Delete this event? This action cannot be undone.');
     if (!ok) return;
     const result = await deleteEvent(event.id);
@@ -122,11 +132,11 @@ const EventDetail = () => {
         }}
       >
         <div className="container">
-          <div className="d-flex justify-content-between align-items-start flex-wrap gap-2">
-            <div>
-              <span className="badge bg-light text-dark">{event.category}</span>
-              <h1 className="fw-bold mt-2 mb-1">{event.title}</h1>
+            <div className="d-flex justify-content-between align-items-start flex-wrap gap-2">
               <div>
+                <span className="badge bg-light text-dark">{event.category}</span>
+                <h1 className="fw-bold mt-2 mb-1">{event.title}</h1>
+                <div>
                 {event.date} · {event.time} · {event.location}
               </div>
             </div>
@@ -134,19 +144,23 @@ const EventDetail = () => {
               <Link to="/events/browse" className="btn btn-light text-primary fw-bold">
                 Back to browse
               </Link>
-              <button
-                type="button"
-                className="btn btn-outline-light"
-                onClick={() => {
-                  setEditMode((v) => !v);
-                  setEditError('');
-                }}
-              >
-                {editMode ? 'Cancel edit' : 'Edit event'}
-              </button>
-              <button type="button" className="btn btn-danger" onClick={onDelete}>
-                Delete
-              </button>
+              {isAuthenticated && (
+                <>
+                  <button
+                    type="button"
+                    className="btn btn-outline-light"
+                    onClick={() => {
+                      setEditMode((v) => !v);
+                      setEditError('');
+                    }}
+                  >
+                    {editMode ? 'Cancel edit' : 'Edit event'}
+                  </button>
+                  <button type="button" className="btn btn-danger" onClick={onDelete}>
+                    Delete
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </div>

@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { useAuth } from './AuthContext';
 
 const fallbackImages = {
   Technology:
@@ -34,6 +35,8 @@ const withFallbacks = (event) => {
 
 export const EventProvider = ({ children }) => {
   const [events, setEvents] = useState([]);
+  const { token } = useAuth();
+  const authHeaders = token ? { Authorization: `Bearer ${token}` } : {};
 
   useEffect(() => {
     let isMounted = true;
@@ -61,9 +64,12 @@ export const EventProvider = ({ children }) => {
     try {
       const res = await fetch(`${API_URL}/events`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...authHeaders },
         body: JSON.stringify(payload),
       });
+      if (res.status === 401) {
+        return { ok: false, error: 'Please log in to create events.' };
+      }
       if (!res.ok) throw new Error(`Failed to create event: ${res.status}`);
       const created = await res.json();
       const normalized = withFallbacks({ ...created, category });
@@ -120,9 +126,10 @@ export const EventProvider = ({ children }) => {
     try {
       const res = await fetch(`${API_URL}/events/${id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...authHeaders },
         body: JSON.stringify(payload),
       });
+      if (res.status === 401) return { ok: false, error: 'Please log in to update events.' };
       if (res.status === 404) return { ok: false, error: 'Event not found' };
       if (!res.ok) throw new Error(`Failed to update event: ${res.status}`);
       const updated = await res.json();
@@ -143,7 +150,11 @@ export const EventProvider = ({ children }) => {
 
   const deleteEvent = async (id) => {
     try {
-      const res = await fetch(`${API_URL}/events/${id}`, { method: 'DELETE' });
+      const res = await fetch(`${API_URL}/events/${id}`, {
+        method: 'DELETE',
+        headers: { ...authHeaders },
+      });
+      if (res.status === 401) return { ok: false, error: 'Please log in to delete events.' };
       if (res.status === 404) return { ok: false, error: 'Event not found' };
       if (!res.ok) throw new Error(`Failed to delete event: ${res.status}`);
       setEvents((prev) => prev.filter((event) => event.id !== Number(id)));
@@ -156,7 +167,7 @@ export const EventProvider = ({ children }) => {
 
   const value = useMemo(
     () => ({ events, createEvent, registerForEvent, updateEvent, deleteEvent }),
-    [events]
+    [events, token]
   );
 
   return <EventContext.Provider value={value}>{children}</EventContext.Provider>;

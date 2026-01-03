@@ -159,3 +159,48 @@ footer {
   color: #9aa0a6 !important;
   opacity: 0.8;
 }
+
+.auth-pill {
+  background: linear-gradient(135deg, rgba(215, 43, 43, 0.12), rgba(42, 138, 58, 0.12));
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 999px;
+  padding: 0.35rem 0.7rem;
+  color: #1f1f1f;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.06);
+}
+
+.auth-pill__avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--emsho-red);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.auth-pill__name {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.auth-pill__caret {
+  font-size: 0.85rem;
+  color: #4a4a4a;
+}
+
+.auth-menu {
+  position: absolute;
+  right: 0;
+  top: 110%;
+  min-width: 160px;
+  z-index: 10;
+}
+
+.auth-menu .dropdown-item {
+  padding: 0.65rem 1rem;
+  font-weight: 600;
+}
