@@ -92,7 +92,7 @@ const attachAttendees = (events, attendees) => {
   return Array.from(byId.values());
 };
 
-// ---------------- HEALTH ----------------
+// ---------------- HEALTH ---------------- adding comment for deployment purpose
 app.get("/", (req, res) => {
   res.send("Backend running for EmshoEvents");
 });
