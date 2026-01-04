@@ -12,6 +12,11 @@ const TOKEN_EXPIRES_IN = "7d";
 app.use(cors());
 app.use(express.json());
 
+
+console.log("DB_HOST:", process.env.DB_HOST);
+console.log("DB_PORT:", process.env.DB_PORT);
+console.log("DB_NAME:", process.env.DB_NAME);
+
 // ---------------- MYSQL CONNECTION (Railway-ready) ----------------
 const pool = mysql.createPool({
   host: process.env.DB_HOST,           // e.g. turntable.proxy.rlwy.net
