@@ -5,7 +5,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const app = express();
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 const JWT_SECRET = process.env.JWT_SECRET || "change-this-secret-in-prod";
 const TOKEN_EXPIRES_IN = "7d";
 
@@ -432,5 +432,5 @@ app.post("/events/:id/attendees", (req, res) => {
 
 // ---------------- START SERVER ----------------
 app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
